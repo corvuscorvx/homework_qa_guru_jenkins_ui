@@ -11,17 +11,22 @@ from pages.registration_page import RegistrationPage
 @pytest.fixture(scope='function')
 def setup_browser():
     options = Options()
-    options.set_capability("browserName", "chrome")
-    options.set_capability("browserVersion", "151.0")
-    options.set_capability("selenoid:options", {
-        "enableVNC": True,
-        "enableVideo": True,
-    })
+
+    selenoid_capabilities = {
+        "browserName": "chrome",
+        "browserVersion": "151.0",
+        "selenoid:options": {
+            "enableVNC": True,
+            "enableVideo": True
+        }
+    }
+    options.capabilities.update(selenoid_capabilities)
 
     driver = webdriver.Remote(
         command_executor="https://user1:1234@selenoid.qa.guru/wd/hub",
         options=options
     )
+
 
     yield driver
 
