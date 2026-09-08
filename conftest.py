@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from utils import attach
 
 from pages.registration_page import RegistrationPage
+from selenium.webdriver.remote.file_detector import LocalFileDetector
 
 
 @pytest.fixture(scope='function')
@@ -26,6 +27,7 @@ def setup_browser():
         command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
         options=options
     )
+    driver.file_detector = LocalFileDetector()
 
     yield driver
 
