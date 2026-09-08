@@ -102,7 +102,7 @@ class RegistrationPage(BasePage):
         subjects_list = subjects if isinstance(subjects, list) else [subjects]
         input_subject = self.wait_for_element_clickable(self.SUBJECTS_INPUT)
 
-        for subject in subjects:
+        for subject in subjects_list:
             input_subject.send_keys(subject)
             specific_option = (By.XPATH,
                                f"//div[contains(@class, 'subjects-auto-complete__option') and text()='{subject}']")
