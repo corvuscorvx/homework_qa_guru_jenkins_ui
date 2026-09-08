@@ -15,7 +15,7 @@ def setup_browser():
     options.set_capability("browserVersion", "151.0")
     options.set_capability("selenoid:options", {
         "enableVNC": True,
-        "enableVideo": False,
+        "enableVideo": True,
     })
 
     driver = webdriver.Remote(
@@ -26,8 +26,8 @@ def setup_browser():
     yield driver
 
     attach.add_screenshot(driver)
-    attach.add_logs(driver)
-    attach.add_html(driver)
+    attach.add_page_source(driver)
+    attach.add_console_logs(driver)
     attach.add_video(driver)
 
     driver.quit()
