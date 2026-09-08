@@ -1,13 +1,23 @@
-from pages.registration_page import RegistrationPage
 import os
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selene import Browser, Config
 from dotenv import load_dotenv
 
 from utils import attach
 
+from pages.registration_page import RegistrationPage
+
 DEFAULT_BROWSER_VERSION = "128.0"
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        '--browser_version',
+        default='128.0'
+    )
 
 
 @pytest.fixture(scope='session', autouse=True)
@@ -16,8 +26,9 @@ def load_env():
 
 
 @pytest.fixture(scope='function')
-def driver(request):
-    browser_version = request.config.getoption('--browser_version', default=DEFAULT_BROWSER_VERSION)
+def setup_browser(request):
+    browser_version = request.config.getoption('--browser_version')
+    browser_version = browser_version if browser_version != "" else DEFAULT_BROWSER_VERSION
 
     options = Options()
     selenoid_capabilities = {
@@ -37,21 +48,22 @@ def driver(request):
         command_executor=f"https://{login}:{password}@selenoid.autotests.cloud/wd/hub",
         options=options
     )
+    browser = Browser(Config(driver))
 
-    yield driver
+    yield browser
 
-    attach.add_screenshot(driver)
-    attach.add_logs(driver)
-    attach.add_html(driver)
-    attach.add_video(driver)
+    attach.add_screenshot(browser)
+    attach.add_logs(browser)
+    attach.add_html(browser)
+    attach.add_video(browser)
 
-    driver.quit()
+    browser.quit()
 
 
 @pytest.fixture(scope="function")
-def registration_page(driver):
+def registration_page(setup_browser):
     driver.get("https://qa-guru.github.io/one-page-form/automation-practice-form.html")
-    return RegistrationPage(driver)
+    return RegistrationPage(setup_browser)
 
 
 @pytest.fixture(scope="function")
