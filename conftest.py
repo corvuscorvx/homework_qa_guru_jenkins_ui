@@ -26,8 +26,8 @@ def setup_browser():
     yield driver
 
     attach.add_screenshot(driver)
-    attach.add_logs(driver)
-    attach.add_html(driver)
+    attach.add_page_source(driver)
+    attach.add_console_logs(driver)
     attach.add_video(driver)
 
     driver.quit()
