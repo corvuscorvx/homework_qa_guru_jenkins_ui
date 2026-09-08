@@ -15,7 +15,7 @@ def setup_browser():
     options.set_capability("browserVersion", "151.0")
     options.set_capability("selenoid:options", {
         "enableVNC": True,
-        "enableVideo": False,
+        "enableVideo": True,
     })
 
     driver = webdriver.Remote(
