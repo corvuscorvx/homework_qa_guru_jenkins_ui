@@ -6,28 +6,22 @@ from selenium.webdriver.chrome.options import Options
 from utils import attach
 
 from pages.registration_page import RegistrationPage
-from selenium.webdriver.remote.file_detector import LocalFileDetector
 
 
 @pytest.fixture(scope='function')
 def setup_browser():
     options = Options()
-
-    selenoid_capabilities = {
-        "browserName": "chrome",
-        "browserVersion": '128.0',
-        "selenoid:options": {
-            "enableVNC": True,
-            "enableVideo": True
-        }
-    }
-    options.capabilities.update(selenoid_capabilities)
+    options.set_capability("browserName", "chrome")
+    options.set_capability("browserVersion", "151.0")
+    options.set_capability("selenoid:options", {
+        "enableVNC": True,
+        "enableVideo": False,
+    })
 
     driver = webdriver.Remote(
-        command_executor=f"https://user1:1234@selenoid.autotests.cloud/wd/hub",
+        command_executor="https://user1:1234@selenoid.qa.guru/wd/hub",
         options=options
     )
-    driver.file_detector = LocalFileDetector()
 
     yield driver
 
