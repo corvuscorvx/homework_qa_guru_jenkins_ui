@@ -10,9 +10,7 @@ from utils import attach
 from pages.registration_page import RegistrationPage
 
 
-@pytest.fixture(scope="session", autouse=True)
-def load_env():
-    load_dotenv()
+load_dotenv()
 
 
 def pytest_addoption(parser):
